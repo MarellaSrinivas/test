@@ -5,6 +5,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({ message: "Hi from Render backend home page 🚀" });
+});
+
 // Simple API for both React & Kotlin frontend
 app.get("/api/hi", (req, res) => {
   res.json({ message: "Hi from Render backend 🚀" });
