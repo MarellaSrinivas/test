@@ -1,0 +1,12 @@
+# Exported from Render on 2025-10-06T06:10:46Z
+version: "1"
+databases:
+- name: hlopg
+  databaseName: hlopg
+  user: hlopg_user
+  plan: free
+  region: oregon
+  ipAllowList:
+  - source: 0.0.0.0/0
+    description: everywhere
+  postgresMajorVersion: "17"
