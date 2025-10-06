@@ -112,24 +112,111 @@ ADD COLUMN is_verified BOOLEAN NOT NULL DEFAULT FALSE;
   }
 });
 
+
+
+app.get("/api/alter-owners-table", async (req, res) => {
+  try {
+    await pool.query(`ALTER TABLE owners
+ADD COLUMN user_type VARCHAR(50) NOT NULL DEFAULT 'owner';
+    `);
+    res.json({ message: "✅ Table 'owners' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter owners table" });
+  }
+});
+
+app.get("/api/alter-owners-table2", async (req, res) => {
+  try {
+    await pool.query(`ALTER TABLE owners
+ADD COLUMN is_verified BOOLEAN NOT NULL DEFAULT FALSE;
+
+    `);
+    res.json({ message: "✅ Table 'users' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter users table" });
+  }
+});
+
+
+
+app.get("/api/alter-owners-table2", async (req, res) => {
+  try {
+    await pool.query(`ALTER TABLE owners
+ADD COLUMN is_verified BOOLEAN NOT NULL DEFAULT FALSE;
+
+    `);
+    res.json({ message: "✅ Table 'users' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter users table" });
+  }
+});
+
+app.get("/api/create-hostel-table3", async (req, res) => {
+  try {
+    await pool.query(`
+      ALTER TABLE owners
+ADD COLUMN email VARCHAR(100) NOT NULL UNIQUE;
+    `);
+    res.json({ message: "✅ Table 'owners' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter owners table" });
+  }
+});
+
+
+app.get("/api/create-hostel-table4", async (req, res) => {
+  try {
+    await pool.query(`
+   ALTER TABLE owners
+ADD COLUMN password VARCHAR(255) NOT NULL;
+    `);
+    res.json({ message: "✅ Table 'owners' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter owners table" });
+  }
+});
+
+
+app.get("/api/create-hostel-table5", async (req, res) => {
+  try {
+    await pool.query(`
+   ALTER TABLE owners
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+    `);
+    res.json({ message: "✅ Table 'owners' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter owners table" });
+  }
+});
+
+
+
 app.get("/api/create-hostel-table", async (req, res) => {
   try {
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS hostels (
-        hostel_id SERIAL PRIMARY KEY,
-        hostel_name VARCHAR(100) NOT NULL,
-        area VARCHAR(100),
-        city VARCHAR(100),
-        rating NUMERIC(2,1) CHECK (rating >= 0 AND rating <= 5),
-        amenities JSONB DEFAULT '{}',
-        price DECIMAL(10,2) NOT NULL,
-        owner_id INT REFERENCES owners(owner_id) ON DELETE CASCADE
-      );
+      CREATE TABLE IF NOT EXISTS otps (
+    id SERIAL PRIMARY KEY,                 -- Auto-increment ID
+    user_id INT NOT NULL,                  -- References users table
+    otp VARCHAR(10) NOT NULL,              -- OTP code
+    expires_at TIMESTAMP NOT NULL,         -- Expiration time
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Creation time
+    CONSTRAINT fk_user
+        FOREIGN KEY(user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
     `);
-    res.json({ message: "✅ Table 'hostels' created successfully" });
+    res.json({ message: "✅ Table 'otps' created successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to create hostels table" });
+    res.status(500).json({ error: "Failed to create otps table" });
   }
 });
 
