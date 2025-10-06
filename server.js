@@ -37,6 +37,22 @@ app.get("/api/create-table", async (req, res) => {
   }
 });
 
+app.get("/api/create-owners-table", async (req, res) => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS owners (
+        owner_id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        phone VARCHAR(15) UNIQUE NOT NULL
+      );
+    `);
+    res.json({ message: "✅ Table 'owners' created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create owners table" });
+  }
+});
+
 app.get("/api/create-hostel-table", async (req, res) => {
   try {
     await pool.query(`
@@ -55,6 +71,47 @@ app.get("/api/create-hostel-table", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to create hostels table" });
+  }
+});
+
+app.post("/api/add-hostel", async (req, res) => {
+  const { hostel_name, area, city, rating, amenities, price, owner_id } = req.body;
+  try {
+    await pool.query(
+      `INSERT INTO hostels (hostel_name, area, city, rating, amenities, price, owner_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [hostel_name, area, city, rating, amenities, price, owner_id]
+    );
+    res.json({ message: "✅ Hostel added successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to add hostel" });
+  }
+});
+
+app.post("/api/add-owner", async (req, res) => {
+  const { name, phone } = req.body;
+
+  if (!name || !phone) {
+    return res.status(400).json({ error: "Name and phone are required" });
+  }
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO owners (name, phone) VALUES ($1, $2) RETURNING owner_id, name, phone",
+      [name, phone]
+    );
+    res.json({
+      message: "✅ Owner added successfully",
+      owner: result.rows[0],
+    });
+  } catch (err) {
+    console.error(err);
+    if (err.code === "23505") { // Unique constraint violation
+      res.status(400).json({ error: "Phone number already exists" });
+    } else {
+      res.status(500).json({ error: "Failed to add owner" });
+    }
   }
 });
 
