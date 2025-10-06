@@ -158,7 +158,7 @@ app.get("/api/create-hostel-table3", async (req, res) => {
   try {
     await pool.query(`
       ALTER TABLE owners
-ADD COLUMN email VARCHAR(100) NOT NULL UNIQUE;
+ADD COLUMN email VARCHAR(100);
     `);
     res.json({ message: "✅ Table 'owners' altered successfully" });
   } catch (err) {
@@ -172,7 +172,7 @@ app.get("/api/create-hostel-table4", async (req, res) => {
   try {
     await pool.query(`
    ALTER TABLE owners
-ADD COLUMN password VARCHAR(255) NOT NULL;
+ADD COLUMN password VARCHAR(255);
     `);
     res.json({ message: "✅ Table 'owners' altered successfully" });
   } catch (err) {
