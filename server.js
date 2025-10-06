@@ -20,14 +20,31 @@ app.get("/api/hi", (req, res) => {
   res.json({ message: "Hi from Render backend 🚀" });
 });
 
+app.get("/api/drop-table", async (req, res) => {
+  try {
+    await pool.query(`
+           DROP TABLE IF EXISTS users;
+
+    `);
+    res.json({ message: "✅ Table 'users' dropped successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to drop table" });
+  }
+});
+
+
 // Create table API
 app.get("/api/create-table", async (req, res) => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(50),
-        email VARCHAR(100)
+       id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
     res.json({ message: "✅ Table 'users' created successfully" });
@@ -37,14 +54,30 @@ app.get("/api/create-table", async (req, res) => {
   }
 });
 
-app.get("/api/create-owners-table", async (req, res) => {
+app.get("/api/drop-owners-table", async (req, res) => {
   try {
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS owners (
-        owner_id SERIAL PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        phone VARCHAR(15) UNIQUE NOT NULL
-      );
+      DROP TABLE IF EXISTS owners;
+
+    `);
+    res.json({ message: "✅ Table 'owners' created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create owners table" });
+  }
+});
+
+app.get("/api/create-owners-table", async (req, res) => {
+  try {
+    await pool.query(`CREATE TABLE owners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ 
     `);
     res.json({ message: "✅ Table 'owners' created successfully" });
   } catch (err) {
