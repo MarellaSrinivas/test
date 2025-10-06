@@ -37,7 +37,26 @@ app.get("/api/create-table", async (req, res) => {
   }
 });
 
-
+app.get("/api/create-hostel-table", async (req, res) => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS hostels (
+        hostel_id SERIAL PRIMARY KEY,
+        hostel_name VARCHAR(100) NOT NULL,
+        area VARCHAR(100),
+        city VARCHAR(100),
+        rating NUMERIC(2,1) CHECK (rating >= 0 AND rating <= 5),
+        amenities JSONB DEFAULT '{}',
+        price DECIMAL(10,2) NOT NULL,
+        owner_id INT REFERENCES owners(owner_id) ON DELETE CASCADE
+      );
+    `);
+    res.json({ message: "✅ Table 'hostels' created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create hostels table" });
+  }
+});
 
 app.get("/api/add-user-get", async (req, res) => {
   const { name, email } = req.query;
