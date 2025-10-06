@@ -39,13 +39,13 @@ app.get("/api/create-table", async (req, res) => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
-       id INT AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   phone VARCHAR(20),
   password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+);
     `);
     res.json({ message: "✅ Table 'users' created successfully" });
   } catch (err) {
@@ -70,7 +70,7 @@ app.get("/api/drop-owners-table", async (req, res) => {
 app.get("/api/create-owners-table", async (req, res) => {
   try {
     await pool.query(`CREATE TABLE owners (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   phone VARCHAR(20),
