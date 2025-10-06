@@ -182,6 +182,20 @@ ADD COLUMN password VARCHAR(255);
 });
 
 
+app.get("/api/create-hostel-table6", async (req, res) => {
+  try {
+    await pool.query(`
+   ALTER TABLE owners
+ADD COLUMN id SERIAL PRIMARY KEY;
+    `);
+    res.json({ message: "✅ Table 'owners' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter owners table" });
+  }
+});
+
+
 app.get("/api/create-hostel-table5", async (req, res) => {
   try {
     await pool.query(`
