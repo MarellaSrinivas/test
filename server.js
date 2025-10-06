@@ -37,6 +37,23 @@ app.get("/api/create-table", async (req, res) => {
   }
 });
 
+
+
+app.get("/api/add-user-get", async (req, res) => {
+  const { name, email } = req.query;
+  if (!name || !email) {
+    return res.status(400).json({ error: "Missing name or email" });
+  }
+  try {
+    await pool.query("INSERT INTO users (name, email) VALUES ($1, $2)", [name, email]);
+    res.json({ message: `✅ User ${name} added via GET` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to add user" });
+  }
+});
+
+
 // Add user
 app.post("/api/add-user", async (req, res) => {
   const { name, email } = req.body;
