@@ -86,6 +86,32 @@ app.get("/api/create-owners-table", async (req, res) => {
   }
 });
 
+
+app.get("/api/alter-users-table", async (req, res) => {
+  try {
+    await pool.query(`ALTER TABLE users
+ADD COLUMN user_type VARCHAR(50) NOT NULL DEFAULT 'user';
+    `);
+    res.json({ message: "✅ Table 'users' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter users table" });
+  }
+});
+
+app.get("/api/alter-users-table2", async (req, res) => {
+  try {
+    await pool.query(`ALTER TABLE users
+ADD COLUMN is_verified BOOLEAN NOT NULL DEFAULT FALSE;
+
+    `);
+    res.json({ message: "✅ Table 'users' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter users table" });
+  }
+});
+
 app.get("/api/create-hostel-table", async (req, res) => {
   try {
     await pool.query(`
