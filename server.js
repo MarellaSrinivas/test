@@ -315,28 +315,28 @@ app.get("/api/users", async (req, res) => {
 
 app.get("/api/owners", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT * FROM owners");
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: "Failed to fetch owners" });
   }
 });
 
 app.get("/api/otps", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT * FROM otps");
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: "Failed to fetch otps" });
   }
 });
 
 app.get("/api/hostels", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT * FROM hostels");
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: "Failed to fetch hostels" });
   }
 });
 
