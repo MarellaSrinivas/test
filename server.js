@@ -212,6 +212,21 @@ ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 
 
+app.get("/api/alterowner", async (req, res) => {
+  try {
+    await pool.query(`
+ALTER TABLE owners
+RENAME COLUMN owner_id TO id;
+
+    `);
+    res.json({ message: "✅ Table 'owners' altered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to alter owners table" });
+  }
+});
+
+
 app.get("/api/create-hostel-table", async (req, res) => {
   try {
     await pool.query(`
